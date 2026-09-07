@@ -73,7 +73,12 @@ const createOrder = asyncHandler(async (req, res) => {
     throw new Error('customerPhone must be a valid phone number');
   }
 
-  const event = new Date(eventDate);
+  let event;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) {
+    event = new Date(eventDate + 'T00:00:00');
+  } else {
+    event = new Date(eventDate);
+  }
   if (isNaN(event.getTime())) {
     res.status(400);
     throw new Error('eventDate is not a valid date');
